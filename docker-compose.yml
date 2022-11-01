@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  mongodatabase:
+    image: mongo:latest
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE=$MONGO_INITDB_DATABASE
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./data/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  app:
+    depends_on:
+      - mongodatabase
+    build: ./.
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.data.mongodb.database"  : "$MONGO_INITDB_DATABASE",
+        "spring.data.mongodb.host" : "mongodatabase",
+        "spring.data.mongodb.port" : "27017",
+        "spring.data.mongodb.username" : "$MONGO_INITDB_ROOT_USERNAME",
+        "spring.data.mongodb.password" : "$MONGO_INITDB_ROOT_PASSWORD"
+      }'
+    volumes:
+      - .m2:/root/.m2
+      - /home/carlos/java-workspace/demoClean:/code
+    stdin_open: true
+    tty: true
+    entrypoint: []
+
+volumes:
+  db:
