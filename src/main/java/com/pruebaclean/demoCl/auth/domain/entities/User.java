@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public class User {
-	//pruebaaaa
+//	private final String REGEX_PATTERN = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 	private final String REGEX_PATTERN ="^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
 
 	private Long id;
