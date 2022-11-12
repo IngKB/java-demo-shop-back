@@ -30,8 +30,8 @@ services:
         "spring.data.mongodb.password" : "$MONGO_INITDB_ROOT_PASSWORD"
       }'
     volumes:
-      - .m2:/root/.m2
-      - /home/carlos/java-workspace/demoClean:/code
+#      - .m2:/root/.m2
+      - /home/eduardo/Desktop/archivos/estudio/java-demo-shop-back:/code
     stdin_open: true
     tty: true
     entrypoint: []
