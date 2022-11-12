@@ -15,7 +15,6 @@ import org.springframework.core.type.filter.TypeFilter;
 @SpringBootApplication
 public class DemoCleanApplication {
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(DemoCleanApplication.class, args);
 	}
@@ -30,9 +29,13 @@ public class DemoCleanApplication {
 	}
 
 	void genericApplicationContext(BeanDefinitionRegistry beanRegistry) {
+		String BASE_PACKAGE = "com.pruebaclean.demoCl";
 		ClassPathBeanDefinitionScanner beanDefinitionScanner = new ClassPathBeanDefinitionScanner(beanRegistry);
 		beanDefinitionScanner.addIncludeFilter(removeModelAndEntitiesFilter());
-		beanDefinitionScanner.scan("com.pruebaclean.demoCl.auth");
+		beanDefinitionScanner.scan(BASE_PACKAGE+".auth");
+		beanDefinitionScanner.scan(BASE_PACKAGE+".product");
+//		beanDefinitionScanner.scan(BASE_PACKAGE+".category");
+
 	}
 
 	static TypeFilter removeModelAndEntitiesFilter() {

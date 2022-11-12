@@ -1,0 +1,14 @@
+package com.pruebaclean.demoCl.product.domain.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
+
+public interface ProductDsGateway {
+    void save (ProductDsRequestModel requestModel);
+
+    ArrayList<?> findAll();
+
+}
