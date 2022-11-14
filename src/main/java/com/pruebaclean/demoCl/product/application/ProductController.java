@@ -1,20 +1,17 @@
 package com.pruebaclean.demoCl.product.application;
 
-import com.pruebaclean.demoCl.product.domain.repository.ProductDsGateway;
-import com.pruebaclean.demoCl.product.domain.repository.ProductDsRequestModel;
-import com.pruebaclean.demoCl.product.domain.useCases.ProductBoundary;
-import com.pruebaclean.demoCl.product.domain.useCases.ProductResponseModel;
-import com.pruebaclean.demoCl.product.infraestructure.models.ProductDataMapper;
-import com.pruebaclean.demoCl.product.infraestructure.repository.ProductRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.pruebaclean.demoCl.product.domain.useCases.ListProducts.ListProductsBoundary;
+import com.pruebaclean.demoCl.product.domain.useCases.ListProducts.ListProductsRequestModel;
+import com.pruebaclean.demoCl.product.domain.useCases.ListProducts.ListProductsResponseModel;
+import com.pruebaclean.demoCl.product.domain.useCases.RegisterProduct.RegisterProductBoundary;
+import com.pruebaclean.demoCl.product.domain.useCases.RegisterProduct.RegisterProductRequestModel;
+import com.pruebaclean.demoCl.product.domain.useCases.RegisterProduct.RegisterProductResponseModel;
+import com.pruebaclean.demoCl.product.domain.useCases.UpdateProduct.UpdateProductBoundary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -22,65 +19,59 @@ import java.util.List;
 
 public class ProductController {
 
-    private final ProductBoundary productBoundary;
+    private final RegisterProductBoundary registerProductBoundary;
+    private final ListProductsBoundary listProductBoundary;
+    private final UpdateProductBoundary updateProductBoundary;
 
-    private final ProductDsGateway productDsGateway;
-
-    private final ProductRepository productRepository;
-
-    public ProductController(ProductBoundary productBoundary, ProductDsGateway productDsGateway, ProductRepository productRepository) {
-        this.productBoundary = productBoundary;
-        this.productDsGateway = productDsGateway;
-        this.productRepository = productRepository;
+    public ProductController(RegisterProductBoundary productBoundary, ListProductsBoundary listProductBoundary, UpdateProductBoundary updateProductBoundary) {
+        this.registerProductBoundary = productBoundary;
+        this.listProductBoundary = listProductBoundary;
+        this.updateProductBoundary = updateProductBoundary;
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveProduct(@Valid @RequestBody ProductDsRequestModel productRequest) {
-        String name = productRequest.getName();
-        String size = productRequest.getSize();
-        String description = productRequest.getDescription();
-        String category = productRequest.getCategory();
-        Integer price = productRequest.getPrice();
-        Integer stock = productRequest.getStock();
+    public ResponseEntity<?> saveProduct(@Valid @RequestBody RegisterProductRequestModel productRequest) {
 
-        ProductDsRequestModel productDsRequestModel = new ProductDsRequestModel();
-        productDsRequestModel.setName(name);
-        productDsRequestModel.setDescription(description);
-        productDsRequestModel.setCategory(category);
-        productDsRequestModel.setSize(size);
-        productDsRequestModel.setPrice(price);
-        productDsRequestModel.setStock(stock);
-
-        try {
-            productDsGateway.save(productDsRequestModel);
-            return ResponseEntity.ok(new ProductResponseModel(productDsRequestModel,"Product saved succesfuly", 0));
-
+        RegisterProductResponseModel response = registerProductBoundary.register(productRequest);
+        if (response.getCode() == 1) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(response.getMessage());
         }
-        catch (Exception e) {
-            return ResponseEntity.ok(new ProductResponseModel(productDsRequestModel,"error during product saving:"+ e,1));
+        return ResponseEntity.ok(response.getMessage());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateProduct(@Valid @RequestBody RegisterProductRequestModel productRequest) {
+
+        RegisterProductResponseModel response = updateProductBoundary.update(productRequest);
+        if (response.getCode() == 1) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(response.getMessage());
         }
+        return ResponseEntity.ok(response.getMessage());
     }
 
     @GetMapping("/list")
-    public ArrayList<?> listProducts(){
-        return productRepository.findAll();
-    }
-
-    @GetMapping("/pagination")
-    public Page<ProductDataMapper> filterProducts(Pageable p){
-        return productRepository.findAllp(p);
-    }
-
-    /*@GetMapping(path="/filter/{name}")*/
-    @GetMapping(path="/filter")
-    public ArrayList<?> filterProductsByName(
-            @RequestParam(name = "name",required=false, defaultValue="null") String productName,
-            @RequestParam(name = "size",required=false, defaultValue="null") String size,
-            @RequestParam(name = "category",required=false, defaultValue="null") String category,
-            @RequestParam(name = "price",required=false, defaultValue="null") Integer price,
-            @RequestParam(name = "stock",required=false, defaultValue="null") Integer stock
+    public ResponseEntity<?> listProducts(
+            @RequestParam(name = "name",required=false, defaultValue="") String productName,
+            @RequestParam(name = "size",required=false, defaultValue="") String size,
+            @RequestParam(name = "category",required=false, defaultValue="") String category,
+            @RequestParam(name = "minprice",required=false, defaultValue="0") Float minPrice,
+            @RequestParam(name = "maxprice",required=false, defaultValue="0") Float maxPrice,
+            @RequestParam(name = "page",required=false, defaultValue="0") Integer page,
+            @RequestParam(name = "pagesize",required=false, defaultValue="20") Integer pagesize
     ){
-        /*if(productName != "null") return productRepository.filterByName(productName);*/
-        return productRepository.filterWithParams(productName, size, category, price, stock);
+        ListProductsRequestModel request = new ListProductsRequestModel(productName,size,
+                category, BigDecimal.valueOf(minPrice),BigDecimal.valueOf(maxPrice), page,pagesize);
+        ListProductsResponseModel response = listProductBoundary.list(request);
+        if (response.getCode() == 1) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(response.getMessage());
+        }
+        return ResponseEntity.ok(response.getProducts());
     }
+
 }

@@ -2,6 +2,8 @@ package com.pruebaclean.demoCl.product.domain.repository;
 
 import com.pruebaclean.demoCl.product.domain.entities.Product;
 
+import java.math.BigDecimal;
+
 public class ProductDsRequestModel {
     private String id;
 
@@ -13,12 +15,22 @@ public class ProductDsRequestModel {
 
     private String category;
 
-    private Integer price;
+    private BigDecimal price;
 
     private Integer stock;
 
     public ProductDsRequestModel() {
 
+    }
+
+    public ProductDsRequestModel(String id, String name, String size, String description, String category, BigDecimal price, Integer stock) {
+        this.id = id;
+        this.name = name;
+        this.size = size;
+        this.description = description;
+        this.category = category;
+        this.price = price;
+        this.stock = stock;
     }
 
     public ProductDsRequestModel(Product product) {
@@ -55,9 +67,9 @@ public class ProductDsRequestModel {
 
     public void setDescription(String description){ this.description = description; }
 
-    public Integer getPrice(){ return price; }
+    public BigDecimal getPrice(){ return price; }
 
-    public void  setPrice(Integer price){ this.price = price; }
+    public void  setPrice(BigDecimal price){ this.price = price; }
 
     public Integer getStock(){ return stock; }
 

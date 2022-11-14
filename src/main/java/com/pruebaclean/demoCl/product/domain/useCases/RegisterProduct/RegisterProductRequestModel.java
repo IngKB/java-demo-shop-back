@@ -1,8 +1,8 @@
-package com.pruebaclean.demoCl.product.domain.useCases;
+package com.pruebaclean.demoCl.product.domain.useCases.RegisterProduct;
 
-public class ProductRequestModel {
+public class RegisterProductRequestModel {
+
     private String id;
-
     private String name;
 
     private String size;
@@ -11,16 +11,16 @@ public class ProductRequestModel {
 
     private String category;
 
-    private Integer price;
+    private Float price;
 
     private Integer stock;
 
-    public ProductRequestModel(
+    public RegisterProductRequestModel(
             String name,
             String size,
             String description,
             String category,
-            Integer price,
+            Float price,
             Integer stock
     ) {
         this.name = name;
@@ -29,14 +29,6 @@ public class ProductRequestModel {
         this.category = category;
         this.price = price;
         this.stock = stock;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() { return name; }
@@ -55,12 +47,20 @@ public class ProductRequestModel {
 
     public void setCategory(String category){ this.category = category; }
 
-    public Integer getPrice(){ return price; }
+    public Float getPrice(){ return price; }
 
     public void  setPrice(){ this.price = price; }
 
     public Integer getStock(){ return stock; }
 
     public void setStock(){ this.stock = stock; }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
 

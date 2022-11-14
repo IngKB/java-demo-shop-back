@@ -1,5 +1,7 @@
 package com.pruebaclean.demoCl.product.domain.entities;
 
+import java.math.BigDecimal;
+
 public class Product {
 
     private String id;
@@ -12,7 +14,7 @@ public class Product {
 
     private String category;
 
-    private Integer price;
+    private BigDecimal price;
 
     private Integer stock;
 
@@ -25,7 +27,7 @@ public class Product {
             String size,
             String description,
             String category,
-            Integer price,
+            BigDecimal price,
             Integer stock
     ) {
         this.name = name;
@@ -34,6 +36,25 @@ public class Product {
         this.category = category;
         this.price = price;
         this.stock = stock;
+    }
+
+    public String isProductValid(){
+        if(this.price.compareTo(BigDecimal.valueOf(0)) < 0){
+            return "El precio debe ser mayor o igual a 0";
+        }
+        if(this.name.length()==0){
+            return "El nombre no puede estar vacío";
+        }
+        if(this.size.length()==0){
+            return "La talla no puede estar vacía";
+        }
+        if(this.category.length()==0){
+            return "La categoría no puede estar vacía";
+        }
+        if(this.stock<0){
+            return "La cantidad debe ser mayor o igual a 0";
+        }
+        return "ok";
     }
 
     public String getId() {
@@ -60,9 +81,9 @@ public class Product {
 
     public void setCategory(String category){ this.category = category; }
 
-    public Integer getPrice(){ return price; }
+    public BigDecimal getPrice(){ return price; }
 
-    public void  setPrice(){ this.price = price; }
+    public void setPrice(){ this.price = price; }
 
     public Integer getStock(){ return stock; }
 

@@ -1,11 +1,8 @@
-package com.pruebaclean.demoCl.product.domain.useCases;
+package com.pruebaclean.demoCl.product.domain.useCases.RegisterProduct;
 
-import com.pruebaclean.demoCl.product.domain.entities.Product;
 import com.pruebaclean.demoCl.product.domain.repository.ProductDsRequestModel;
 
-import java.lang.reflect.Array;
-
-public class ProductResponseModel {
+public class RegisterProductResponseModel {
 
     private String message;
 
@@ -13,7 +10,7 @@ public class ProductResponseModel {
 
     private Integer code;
 
-    public ProductResponseModel(ProductDsRequestModel data, String message, Integer code) {
+    public RegisterProductResponseModel(ProductDsRequestModel data, String message, Integer code) {
         this.data = data;
         this.message = message;
         this.code = code;

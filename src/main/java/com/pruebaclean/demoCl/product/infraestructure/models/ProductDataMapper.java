@@ -1,8 +1,11 @@
 package com.pruebaclean.demoCl.product.infraestructure.models;
 
 import com.pruebaclean.demoCl.product.domain.entities.Product;
+import com.pruebaclean.demoCl.product.domain.repository.ProductDsRequestModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.math.BigDecimal;
 
 @Document(collection = "products")
 public class ProductDataMapper {
@@ -18,7 +21,7 @@ public class ProductDataMapper {
 
     private String description;
 
-    private Integer price;
+    private BigDecimal price;
 
     private Integer stock;
 
@@ -26,7 +29,8 @@ public class ProductDataMapper {
 
     }
 
-    public ProductDataMapper(Product product) {
+    public ProductDataMapper(ProductDsRequestModel product) {
+        this.id = product.getId();
         this.name = product.getName();
         this.size = product.getSize();
         this.description = product.getDescription();
@@ -59,9 +63,9 @@ public class ProductDataMapper {
 
     public void setCategory(String category){ this.category = category; }
 
-    public Integer getPrice(){ return price; }
+    public BigDecimal getPrice(){ return price; }
 
-    public void  setPrice(Integer price){ this.price = price; }
+    public void  setPrice(BigDecimal price){ this.price = price; }
 
     public Integer getStock(){ return stock; }
 
