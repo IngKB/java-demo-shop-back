@@ -31,7 +31,8 @@ services:
       }'
     volumes:
 #      - .m2:/root/.m2
-      - /home/carlos/java-workspace/java-demo-shop-back:/code
+#      - /home/carlos/java-workspace/java-demo-shop-back:/code
+      - ./:/code
     stdin_open: true
     tty: true
     entrypoint: []
